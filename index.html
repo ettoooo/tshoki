@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal Form</title>
+  <style>
+    body {
+      background-color: #f8f1e4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-container {
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    input {
+      border: none;
+      border-bottom: 2px solid #333;
+      outline: none;
+      background: none;
+      width: 250px;
+      font-size: 18px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #ff7b00;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    button {
+      margin-top: 20px;
+      background: none;
+      border: 2px solid #333;
+      padding: 6px 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      border-radius: 8px;
+    }
+
+    button:hover {
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>What's your full name?</h2>
+    <input type="text" id="nameInput" placeholder="Type your answer..." />
+    <div class="error" id="errorMsg">That’s not correct. Try again!</div>
+    <br>
+    <button onclick="checkAnswer()">→</button>
+  </div>
+
+  <script>
+    function checkAnswer() {
+      const correctAnswer = "Tshoki Peljore Toffy"; 
+      const input = document.getElementById("nameInput").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (input.toLowerCase() === correctAnswer.toLowerCase()) {
+        window.location.href = "welcome.html"; 
+      } else {
+        errorMsg.style.display = "block"; 
+      }
+    }
+  </script>
+</body>
+</html>

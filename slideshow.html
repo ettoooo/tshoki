@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Slideshow</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffd6e0, #d6e6ff);
+      text-align: center;
+      padding-top: 40px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 30px;
+      max-width: 90%;
+      line-height: 1.4;
+    }
+
+    .slideshow-container {
+  position: relative;
+  width: 60%; /* reduce width from 80% for better proportions */
+  max-width: 800px;
+  height: 3000px;
+  aspect-ratio: 4 / 3; /* keeps a natural rectangular shape */
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.slides {
+  display: none;
+  width: 100%;
+  height: 100%;
+  max-height: 70vh; /* optional limit, so it doesn’t get too tall */
+  border-radius: 16px;
+  object-fit: contain; /* shows full image without cropping */
+  background-color: rgba(255, 255, 255, 0.5); /* subtle background behind smaller images */
+}
+
+    /* Smooth fade transition */
+    .fade {
+      animation: fadeEffect 2.5s ease-in-out;
+    }
+
+    @keyframes fadeEffect {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    /* Navigation buttons */
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 14px 18px;
+      color: white;
+      font-weight: bold;
+      font-size: 24px;
+      border-radius: 50%;
+      user-select: none;
+      background-color: rgba(0, 0, 0, 0.4);
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    /* Dots navigation */
+    .dots {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .dot {
+      cursor: pointer;
+      height: 12px;
+      width: 12px;  
+      margin: 0 4px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.4s;
+    }
+
+    .active, .dot:hover {
+      background-color: #717171;
+    }
+
+    .wrap {
+    margin-top: 100px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+.button {
+  min-width: 300px;
+  min-height: 60px;
+  display: inline-flex;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: #313133;
+  background: #4FD1C5;
+background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 100%);
+  border: none;
+  border-radius: 1000px;
+  box-shadow: 12px 12px 24px rgba(79,209,197,.64);
+  transition: all 0.3s ease-in-out 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  padding: 10px;
+  }
+
+.button::before {
+content: '';
+  border-radius: 1000px;
+  min-width: calc(300px + 12px);
+  min-height: calc(60px + 12px);
+  border: 6px solid #00FFCB;
+  box-shadow: 0 0 60px rgba(0,255,203,.64);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all .3s ease-in-out 0s;
+}
+
+.button:hover, 
+.button:focus {
+  color: #313133;
+  transform: translateY(-6px);
+}
+
+.button:hover::before, 
+.button:focus::before {
+  opacity: 1;
+}
+
+.button::after {
+  content: '';
+  width: 30px; height: 30px;
+  border-radius: 100%;
+  border: 6px solid #00FFCB;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring 1.5s infinite;
+}
+
+.button:hover::after, 
+.button:focus::after {
+  animation: none;
+  display: none;
+}
+
+@keyframes ring {
+  0% {
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+  </style>
+</head>
+<body>
+
+  <h2>Ahahahaha I love these photos sooo muchhh, they're all so cuteee!!! hehehe</h1>
+
+  <div class="slideshow-container">
+    <img class="slides fade" src="slide/p1.jpeg" alt="Memory 1">
+    <img class="slides fade" src="slide/p13.jpeg" alt="Memory 2">
+    <img class="slides fade" src="slide/p10.jpeg" alt="Memory 3">
+    <img class="slides fade" src="slide/p11.jpeg" alt="Memory 4">
+    <img class="slides fade" src="slide/p12.jpeg" alt="Memory 5">
+    <img class="slides fade" src="slide/p2.jpeg" alt="Memory 6">
+    <img class="slides fade" src="slide/p14.jpeg" alt="Memory 7">
+    <img class="slides fade" src="slide/p15.jpeg" alt="Memory 8">
+    <img class="slides fade" src="slide/p16.jpeg" alt="Memory 9">
+    <img class="slides fade" src="slide/p17.jpeg" alt="Memory 10">
+    <img class="slides fade" src="slide/p18.jpeg" alt="Memory 11">
+    <img class="slides fade" src="slide/p19.jpeg" alt="Memory 12">
+    <img class="slides fade" src="slide/p20.jpeg" alt="Memory 13">
+    <img class="slides fade" src="slide/p21.jpeg" alt="Memory 14">
+    <img class="slides fade" src="slide/p22.jpg" alt="Memory 15">
+    <img class="slides fade" src="slide/p23.jpg" alt="Memory 16">
+    <img class="slides fade" src="slide/p24.jpg" alt="Memory 17">
+    <img class="slides fade" src="slide/p25.jpeg" alt="Memory 18">
+    <img class="slides fade" src="slide/p26.jpeg" alt="Memory 19">
+    <img class="slides fade" src="slide/p27.jpeg" alt="Memory 20">
+    <img class="slides fade" src="slide/p28.jpeg" alt="Memory 21">
+    <img class="slides fade" src="slide/p29.jpeg" alt="Memory 22">
+    <img class="slides fade" src="slide/p3.jpeg" alt="Memory 23">
+    <img class="slides fade" src="slide/p30.jpeg" alt="Memory 24">
+    <img class="slides fade" src="slide/p31.jpeg" alt="Memory 25">
+    <img class="slides fade" src="slide/p32.jpeg" alt="Memory 26">
+    <img class="slides fade" src="slide/p33.png" alt="Memory 27">
+    <img class="slides fade" src="slide/p34.jpeg" alt="Memory 28">
+    <img class="slides fade" src="slide/p35.jpeg" alt="Memory 29">
+    <img class="slides fade" src="slide/p36.jpeg" alt="Memory 30">
+    <img class="slides fade" src="slide/p37.jpeg" alt="Memory 31">
+    <img class="slides fade" src="slide/p38.jpeg" alt="Memory 32">
+    <img class="slides fade" src="slide/p39.jpeg" alt="Memory 33">
+    <img class="slides fade" src="slide/p40.png" alt="Memory 34">
+    <img class="slides fade" src="slide/p4.jpeg" alt="Memory 35">
+    <img class="slides fade" src="slide/p41.jpeg" alt="Memory 36">
+    <img class="slides fade" src="slide/p42.jpeg" alt="Memory 37">
+    <img class="slides fade" src="slide/p43.jpeg" alt="Memory 38">
+    <img class="slides fade" src="slide/p44.png" alt="Memory 39">
+    <img class="slides fade" src="slide/p45.jpeg" alt="Memory 40">
+    <img class="slides fade" src="slide/p46.png" alt="Memory 41">
+    <img class="slides fade" src="slide/p47.png" alt="Memory 42">
+    <img class="slides fade" src="slide/p48.jpeg" alt="Memory 43">
+    <img class="slides fade" src="slide/p49.png" alt="Memory 44">
+    <img class="slides fade" src="slide/p5.jpeg" alt="Memory 45">
+    <img class="slides fade" src="slide/p50.png" alt="Memory 46">
+    <img class="slides fade" src="slide/p51.jpeg" alt="Memory 47">
+    <img class="slides fade" src="slide/p52.jpeg" alt="Memory 48">
+    <img class="slides fade" src="slide/p53.jpeg" alt="Memory 49">
+    <img class="slides fade" src="slide/p54.jpeg" alt="Memory 50">
+    <img class="slides fade" src="slide/p55.jpeg" alt="Memory 51">
+    <img class="slides fade" src="slide/p56.jpeg" alt="Memory 52">
+    <img class="slides fade" src="slide/p57.jpeg" alt="Memory 53">
+    <img class="slides fade" src="slide/p58.jpeg" alt="Memory 54">
+    <img class="slides fade" src="slide/p59.jpeg" alt="Memory 55">
+    <img class="slides fade" src="slide/p6.jpeg" alt="Memory 56">
+    <img class="slides fade" src="slide/p60.jpeg" alt="Memory 57">
+    <img class="slides fade" src="slide/p61.jpeg" alt="Memory 58">
+    <img class="slides fade" src="slide/p62.jpeg" alt="Memory 59">
+    <img class="slides fade" src="slide/p63.jpeg" alt="Memory 60">
+    <img class="slides fade" src="slide/p64.jpeg" alt="Memory 61">
+    <img class="slides fade" src="slide/p65.jpeg" alt="Memory 62">
+    <img class="slides fade" src="slide/p66.jpeg" alt="Memory 63">
+    <img class="slides fade" src="slide/p7.jpeg" alt="Memory 64">
+    <img class="slides fade" src="slide/p8.jpeg" alt="Memory 65">
+    <img class="slides fade" src="slide/p9.jpeg" alt="Memory 66">
+
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+  </div>
+
+  <div class="dots">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    <span class="dot" onclick="currentSlide(4)"></span>
+    <span class="dot" onclick="currentSlide(5)"></span>
+    <span class="dot" onclick="currentSlide(6)"></span>
+    <span class="dot" onclick="currentSlide(7)"></span>
+    <span class="dot" onclick="currentSlide(8)"></span>
+    <span class="dot" onclick="currentSlide(9)"></span>
+    <span class="dot" onclick="currentSlide(10)"></span>
+    <span class="dot" onclick="currentSlide(11)"></span>
+    <span class="dot" onclick="currentSlide(12)"></span>
+    <span class="dot" onclick="currentSlide(13)"></span>
+    <span class="dot" onclick="currentSlide(14)"></span>
+    <span class="dot" onclick="currentSlide(15)"></span>
+    <span class="dot" onclick="currentSlide(16)"></span>
+    <span class="dot" onclick="currentSlide(17)"></span>
+    <span class="dot" onclick="currentSlide(18)"></span>
+    <span class="dot" onclick="currentSlide(19)"></span>
+    <span class="dot" onclick="currentSlide(20)"></span>
+    <span class="dot" onclick="currentSlide(21)"></span>
+    <span class="dot" onclick="currentSlide(22)"></span>
+    <span class="dot" onclick="currentSlide(23)"></span>
+    <span class="dot" onclick="currentSlide(24)"></span>
+    <span class="dot" onclick="currentSlide(25)"></span>
+    <span class="dot" onclick="currentSlide(26)"></span>
+    <span class="dot" onclick="currentSlide(27)"></span>
+    <span class="dot" onclick="currentSlide(28)"></span>
+    <span class="dot" onclick="currentSlide(29)"></span>
+    <span class="dot" onclick="currentSlide(30)"></span>
+    <span class="dot" onclick="currentSlide(31)"></span>
+    <span class="dot" onclick="currentSlide(32)"></span>
+    <span class="dot" onclick="currentSlide(33)"></span>
+    <span class="dot" onclick="currentSlide(34)"></span>
+    <span class="dot" onclick="currentSlide(35)"></span>
+    <span class="dot" onclick="currentSlide(36)"></span>
+    <span class="dot" onclick="currentSlide(37)"></span>
+    <span class="dot" onclick="currentSlide(38)"></span>
+    <span class="dot" onclick="currentSlide(39)"></span>
+    <span class="dot" onclick="currentSlide(40)"></span>
+    <span class="dot" onclick="currentSlide(41)"></span>
+    <span class="dot" onclick="currentSlide(42)"></span>
+    <span class="dot" onclick="currentSlide(43)"></span>
+    <span class="dot" onclick="currentSlide(44)"></span>
+    <span class="dot" onclick="currentSlide(45)"></span>
+    <span class="dot" onclick="currentSlide(46)"></span>
+    <span class="dot" onclick="currentSlide(47)"></span>
+    <span class="dot" onclick="currentSlide(48)"></span>
+    <span class="dot" onclick="currentSlide(49)"></span>
+    <span class="dot" onclick="currentSlide(50)"></span>
+    <span class="dot" onclick="currentSlide(51)"></span>
+    <span class="dot" onclick="currentSlide(52)"></span>
+    <span class="dot" onclick="currentSlide(53)"></span>
+    <span class="dot" onclick="currentSlide(54)"></span>
+    <span class="dot" onclick="currentSlide(55)"></span>
+    <span class="dot" onclick="currentSlide(56)"></span>
+    <span class="dot" onclick="currentSlide(57)"></span>
+    <span class="dot" onclick="currentSlide(58)"></span>
+    <span class="dot" onclick="currentSlide(59)"></span>
+    <span class="dot" onclick="currentSlide(60)"></span>
+    <span class="dot" onclick="currentSlide(61)"></span>
+    <span class="dot" onclick="currentSlide(62)"></span>
+    <span class="dot" onclick="currentSlide(63)"></span>
+    <span class="dot" onclick="currentSlide(64)"></span>
+    <span class="dot" onclick="currentSlide(65)"></span>
+    <span class="dot" onclick="currentSlide(66)"></span>
+
+  </div>
+  
+  <div class="wrap">
+    <a href="songs.html">
+      <button class="button">Last Oneee</button>
+    </a>
+  </div>
+  <audio id="bg-music" autoplay loop hidden>
+  <source src="eeegee.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+  let slideIndex = 0;
+  let slideTimer;
+
+  function showSlides() {
+    const slides = document.getElementsByClassName("slides");
+    const dots = document.getElementsByClassName("dot");
+
+    // Hide all slides
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+
+    // Move to next slide
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1; }
+    if (slideIndex < 1) { slideIndex = slides.length; }
+
+    // Deactivate all dots
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+
+    // Show current slide and activate corresponding dot
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].className += " active";
+
+    // Auto-advance every 7 seconds
+    slideTimer = setTimeout(showSlides, 3000);
+  }
+
+  function plusSlides(n) {
+    clearTimeout(slideTimer);
+    slideIndex += n - 1;
+
+    // Ensure the index loops correctly
+    const slides = document.getElementsByClassName("slides");
+    if (slideIndex >= slides.length) { slideIndex = 0; }
+    if (slideIndex < 0) { slideIndex = slides.length - 1; }
+
+    showSlides();
+  }
+
+  function currentSlide(n) {
+    clearTimeout(slideTimer);
+    slideIndex = n - 1;
+    showSlides();
+  }
+
+  // Start the slideshow
+  showSlides();
+  window.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('bg-music');
+
+    // Try to play the audio after a small delay
+    setTimeout(() => {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          // Fade in the volume gradually
+          audio.volume = 0;
+          const fadeInterval = setInterval(() => {
+            if (audio.volume < 1.0) {
+              audio.volume = Math.min(audio.volume + 0.02, 1.0);
+            } else {
+              clearInterval(fadeInterval);
+            }
+          }, 300); // smooth fade every 0.3s
+        }).catch(() => {
+          console.log("Autoplay blocked — user interaction required.");
+        });
+      }
+    }, 1000);
+  });
+</script>
+</body>
+</html>  

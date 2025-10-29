@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Us Forever</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+       margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #ffd6e0, #d6e6ff);
+  color: #333;
+  line-height: 1.7;
+    }
+
+    header {
+      text-align: center;
+      padding: 80px 20px 40px;
+    }
+
+    header h1 {
+      font-family: 'Great Vibes', cursive;
+  font-size: 3.2rem;
+  font-weight: 400;
+  color: #222;
+  letter-spacing: 1px;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: linear-gradient(135deg, #ff80b5, #6faaff);
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 50px;
+    }
+
+    section h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+  font-style: italic;
+  color: #444;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+    }
+
+    p {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+    .image-pair {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 100px;
+      margin: 30px 0;
+    }
+
+    .image-pair img {
+      width: 320px;
+      height: 470px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .image-pair img:hover {
+      transform: scale(1.03);
+    }
+
+    footer {
+  text-align: center;
+  padding: 40px 0;
+  font-style: italic;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* space between text and button */
+}
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      section {
+        padding: 25px 15px;
+      }
+      .image-pair img {
+        width: 90%;
+      }
+    }
+
+    .wrapper {
+  position: relative;
+  bottom: 0;
+  margin-top: 40px;
+}
+/* --- Button Fade + Slide Animation --- */
+.wrapper {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* When visible */
+.wrapper.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.link_wrapper{
+  position: relative;
+}
+
+a{
+  display: block;
+  width: 250px;
+  height: 50px;
+  line-height: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  background: #333;
+  text-align: center;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 3px solid #333;
+  transition: all .35s;
+}
+
+.icon{
+  width: 50px;
+  height: 50px;
+  border: 3px solid transparent;
+  position: absolute;
+  transform: rotate(45deg);
+  right: 0;
+  top: 0;
+  z-index: -1;
+  transition: all .35s;
+}
+
+.icon svg{
+  width: 30px;
+  position: absolute;
+  top: calc(50% - 15px);
+  left: calc(50% - 15px);
+  transform: rotate(-45deg);
+  fill: #2ecc71;
+  transition: all .35s;
+}
+
+a:hover{
+  width: 200px;
+  border: 3px solid #2ecc71;
+  background: transparent;
+  color: #2ecc71;
+}
+
+a:hover + .icon{
+  border: 3px solid #2ecc71;
+  right: -25%;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Tshoki and Raghav</h1>
+  </header>
+
+  <section>
+    <p>It's been a long time coming. I've been thinking a lot about you these days baby. I'm sorry for all the times I have hurt you, and I apologize for all the inconveniences I may have caused. I am thankful you remain by my side through all things(through thick and thin as they say hehe).</p>
+    <p>"time goes by much faster than I can grasp." words you wrote in the letter you gave me oh so long agooo. I think about it a lot. Time is so funny, I first met you before I even became a teenager, and now I am nearing the end of my final teenage year. I am so glad I am going though life with you. So many things come and go, but my love for you stays intact. I will make sure to make you feel it too.</p>
+  </section>
+
+  <section>
+    <h2>Time...</h2>
+    <div class="image-pair">
+      <img src="images/image1.jpg" alt="Happy memory 1">
+      <img src="images/image2.jpg" alt="Happy memory 2">
+    </div>
+    <p>We've been together for over two years now, and we've talked basically everyday for three years muahaha. And in these two years, you've been with me through some of the most pivotal moments of my life. From leaving home and coming to India for the first time, having the best time of my life with you, going to desuung training and finally becoming a citizen of my country, and getting my first payment (from my dad albeit), you have been with me through it all.</p>
+    <p>I look forward to all the pivotal events coming our way in the future. Going through it all with you, one step at a time.</p>
+  </section>
+
+  <section>
+    <h2>Growing, us forever and after</h2>
+    <p><em>What does growth mean to you?</em>Hema, I used to be really scared of growing older, I thought it just meant growing old physically, and I thought I was constantly running out of time. But ever since we've been together, I look forward to it. Growing doesn't just mean getting old, but also growing as a person, mentally, emotionally. Growing with you is the best thing that has happened to me these past few years, and I wouldn't change it for anything. I can't wait to grow old with you, with our happy little lives somewhere nice and quiet (hopefully, when we have a lot of money).</p>
+    <p>I feel like I've grown a lot. I feel like a much different person than I was a couple of years ago, I don't hate the way I look, or the way I talk anymore. I feel confident in who I am and who I can be. I have no one else to thank other than the love of my life :). You mean so much to me and I intend to make you never forget that.</p>
+    <p>I love you so much, tshoki!!!</p>
+    <p>(and I love you too)</p>
+    <div class="image-pair">
+      <img src="images/image3.jpg" alt="Happy memory 3">
+      <img src="images/image4.jpg" alt="Happy memory 4">
+    </div>
+  </section>
+
+  <footer>
+    <p>I know you in every universe that exists. You have always felt very familiar after all.</p>
+    <div class="wrapper">
+  <div class="link_wrapper">
+    <a href="slideshow.html">Hover Me!</a>
+    <div class="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.832 268.832">
+        <path d="M265.17 125.577l-80-80c-4.88-4.88-12.796-4.88-17.677 0-4.882 4.882-4.882 12.796 0 17.678l58.66 58.66H12.5c-6.903 0-12.5 5.598-12.5 12.5 0 6.903 5.597 12.5 12.5 12.5h213.654l-58.66 58.662c-4.88 4.882-4.88 12.796 0 17.678 2.44 2.44 5.64 3.66 8.84 3.66s6.398-1.22 8.84-3.66l79.997-80c4.883-4.882 4.883-12.796 0-17.678z"/>
+      </svg>
+    </div>
+  </div>
+  </footer>
+  
+</div>
+
+<script>
+  const wrapper = document.querySelector('.wrapper');
+
+  window.addEventListener('scroll', () => {
+    const triggerPoint = window.innerHeight + window.scrollY;
+    const pageHeight = document.body.offsetHeight;
+
+    if (triggerPoint >= pageHeight - 100) { // 100px from bottom
+      wrapper.classList.add('show');
+    } else {
+      wrapper.classList.remove('show');
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>My Music Library (Horizontal Scroll)</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #D3D3FF;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 40px;
+    color: #2C2D2D;
+  }
+  h3 {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  /* section wrapper for each playlist row */
+  .music-row {
+    position: relative;
+    margin: 50px auto;
+    width: 90%;
+  }
+
+  .row-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.3rem;
+    color: #2C2D2D;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-weight: bolder;
+  }
+
+  .player-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible; /* allow buttons to be clickable outside container */
+  }
+
+  .player-container {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 30px 60px;
+    width: 100%;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    z-index: 1; /* put container below the buttons */
+  }
+
+  .player-container::-webkit-scrollbar { height: 8px; }
+  .player-container::-webkit-scrollbar-thumb {
+    background: rgba(255,182,193,0.7);
+    border-radius: 10px;
+  }
+
+  .player-card {
+    flex: 0 0 250px;
+    scroll-snap-align: start;
+    background-color: rgba(255,255,255,0.85);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+
+  .player-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+  }
+  .player-card img {
+    width: 100%;
+    border-radius: 10px;
+    display:block;
+  }
+
+  .play-btn {
+    background-color: #c1e1c1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+  .play-btn:hover {
+    filter: brightness(0.95);
+  }
+
+  .scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255,255,255,0.95);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    transition: background 0.2s ease, transform 0.12s ease;
+    z-index: 999;            /* ensure button is on top */
+    pointer-events: auto;     /* ensure it accepts clicks */
+  }
+  .scroll-btn:active { transform: translateY(-50%) scale(0.97); }
+  .scroll-btn:hover { background-color: white; }
+  .scroll-left { left: 8px; }
+  .scroll-right { right: 8px; }
+
+  /* bottom player bar */
+  .player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #d6e6ff ; /* fully solid white */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1); /* subtle top shadow */
+  z-index: 2000; /* keep it above all content */
+}
+
+.now-playing {
+  font-weight: 600;
+  color: #333;
+}
+
+audio {
+  width: 320px;
+  max-width: 40%;
+}
+
+  @media (max-width: 700px) {
+    .player-container { padding: 20px; gap: 18px; }
+    .player-card { flex: 0 0 200px; }
+  }
+
+#coffee-wrapper {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.3); /* adjust scale to fit navbar */
+  transform-origin: bottom center;
+  height: 100px;
+}
+
+  #container {
+	position: relative;
+  width: 150px;
+  height: 100px;
+  margin: 0 auto;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.steam {
+  position: absolute;
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  background-color: #fff;
+  top: -60px;          /* start just above the cup’s rim */
+  left: 1%;           /* center horizontally */
+  transform: translateX(-50%);  /* perfect centering */
+  z-index: 0;
+  opacity: 0;
+}
+
+#steam1 {
+  -webkit-animation: steam1 4s ease-out infinite;
+  animation: steam1 4s ease-out infinite;
+}
+
+#steam3 {
+  -webkit-animation: steam1 4s ease-out 1s infinite;
+  animation: steam1 4s ease-out 1s infinite;
+}
+
+@-webkit-keyframes steam1 {
+  0% {transform: translateY(0) translateX(0) scale(0.25); opacity: 0.2;}
+  100% {transform: translateY(-200px) translateX(-20px) scale(1); opacity: 0;}
+}
+
+@keyframes steam1 {
+  0% {transform: translateY(0) translateX(0) scale(0.25); opacity: 0.2;}
+  100% {transform: translateY(-200px) translateX(-20px) scale(1); opacity: 0;}
+}
+
+#steam2 {
+  -webkit-animation: steam2 4s ease-out 0.5s infinite;
+  animation: steam2 4s ease-out 0.5s infinite;
+}
+
+#steam4 {
+  -webkit-animation: steam2 4s ease-out 1.5s infinite;
+  animation: steam2 4s ease-out 1.5s infinite;
+}
+
+@-webkit-keyframes steam2 {
+  0% {transform: translateY(0) translateX(0) scale(0.25); opacity: 0.2;}
+  100% {transform: translateY(-200px) translateX(20px) scale(1); opacity: 0;}
+}
+
+@keyframes steam2 {
+  0% {transform: translateY(0) translateX(0) scale(0.25); opacity: 0.2;}
+  100% {transform: translateY(-200px) translateX(20px) scale(1); opacity: 0;}
+}
+
+#cup {
+  z-index: 1;
+}
+
+#cup-body {
+  position: absolute;
+  height: 70px;
+  width: 100px;
+  border-radius: 0 0 150px 150px;
+  background-color: #fff;
+  margin: auto;
+  display: inline-block;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#cup-shade {
+  position: relative;
+  height: 30px;
+  width: 20px;
+  background-color: #F3F3F3;
+  display: inline-block;
+  margin-left: 42%;
+  margin-top: -3px;
+  transform: rotate(50deg);
+  z-index: 1;
+}
+
+#cup-handle {
+  position: absolute;
+  right: 5px;     /* was -12px — small positive value pulls it closer */
+  bottom: 45px;   /* tweak for vertical alignment */
+  width: 35px;
+  height: 35px;
+  border: 6px solid #F3F3F3;
+  border-left: none;
+  border-radius: 0 50% 50% 0;
+  background: transparent;
+  z-index: 0;
+}
+
+#saucer {
+  position: absolute;
+  bottom: 14px;   /* was 0 — lifts saucer up to meet cup */
+  left: 0;
+  width: 150px;
+  height: 14px;
+  background-color: #F9F9F9;
+  border-radius: 0 0 75px 75px;
+  z-index: 1; /* slightly below cup-body */
+}
+
+#shadow {
+  position: absolute;
+  bottom: 8px;    /* sits right below the saucer */
+  left: 0;
+  width: 150px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #7bb8d4;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+</style>
+</head>
+<body>
+
+  <h1>Song Collection from Raghav!!! :DDD</h1>
+  <h3><em>Spotify is like totally overrateddd. Sooo, here is a personal playlist website for you!</em></h3>
+
+  <!-- ===== Row 1 ===== -->
+  <div class="music-row">
+    <div class="row-title">Two Big Hearts</div>
+    <div class="player-section">
+      <button class="scroll-btn scroll-left" aria-label="Scroll row1 left" onclick="scrollPrev('row1')">&#10094;</button>
+      <div class="player-container" id="row1">
+        <div class="player-card" data-src="songs/morethanfriends.mp3">
+          <img src="albums/morethanfriends.png" alt="aiden">
+          <h3>More than Friends</h3><div>Aiden Bissett</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/city.mp3">
+          <img src="albums/johnvin.png" alt="Soft Breeze cover">
+          <h3>City Rain</h3><div>John Vincent III</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/stay.mp3">
+          <img src="albums/stay-galdive.png" alt="Dream Sequence cover">
+          <h3>Stay</h3><div>Galdive</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/holdyourhand.mp3">
+          <img src="albums/beatles.png" alt="Ocean Lights cover">
+          <h3>I Want To Hold Your Hand</h3><div>The Beatles</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/eluardian.mp3">
+          <img src="albums/eluardian.png" alt="Golden Hour cover">
+          <h3>An Eluardian Instance</h3><div>Of Montreal</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/nalumala.mp3">
+          <img src="albums/nalumala.png" alt="Golden Hour cover">
+          <h3>Nalu Mala</h3><div>The Lungten</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/OK.mp3">
+          <img src="albums/OK.png" alt="Golden Hour cover">
+          <h3>OK</h3><div>Wallows</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/levelofconcern.mp3">
+          <img src="albums/pilots.png" alt="Golden Hour cover">
+          <h3>Level of Concern</h3><div>Twenty One Pilots</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/inthesun.mp3">
+          <img src="albums/weezer.png" alt="Golden Hour cover">
+          <h3>Island In The Sun</h3><div>Weezer</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/eloquent.mp3">
+          <img src="albums/eloquentfrog.png" alt="Golden Hour cover">
+          <h3>Eloquent Frog</h3><div>Alan Gogoll</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/lookingoutforyou.mp3">
+          <img src="albums/joyagainlookingout.png" alt="Golden Hour cover">
+          <h3>Looking Out For You</h3><div>Joy Again</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/thislove.mp3">
+          <img src="albums/thislove.png" alt="Golden Hour cover">
+          <h3>This Love</h3><div>Maroon 5</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/sopretty.mp3">
+          <img src="albums/wasiaproject.png" alt="Golden Hour cover">
+          <h3>ur so pretty</h3><div>Wasia Project</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/bless_the_telephone.mp3">
+          <img src="albums/bless.png" alt="Golden Hour cover">
+          <h3>Bless the Telephone</h3><div>Labi Siffre</div>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="player-card" data-src="songs/babyboom.mp3">
+          <img src="albums/babyboomers.png" alt="Golden Hour cover">
+          <h3>Ol' Moon</h3><div>The Baby Boomers</div>
+          <button class="play-btn">Play</button>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" aria-label="Scroll row1 right" onclick="scrollNext('row1')">&#10095;</button>
+    </div>
+  </div>
+
+  <!-- ===== Row 2 ===== -->
+  <div class="music-row">
+    <div class="row-title">By Me :D</div>
+    <div class="player-section">
+      <button class="scroll-btn scroll-left" aria-label="Scroll row2 left" onclick="scrollPrev('row2')">&#10094;</button>
+      <div class="player-container" id="row2">
+        <div class="player-card" data-src="songs/amtrak.mp3">
+          <img src="images/amtrak.jpeg" alt="Summer Dance cover">
+          <h3>Amtrak</h3><div>Raghav</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/baeyul.mp3">
+          <img src="images/baeyul.jpeg" alt="Electric Night cover">
+          <h3>Baeyul Song I forgot the name of</h3><div>Raggit</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/beautiful.mp3">
+          <img src="images/beautiful.jpeg" alt="Firefly cover">
+          <h3>Beautiful Boi</h3><div>Ragbit</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/original.mp3">
+          <img src="images/original.jpeg" alt="Midnight Drive cover">
+          <h3>Original No.</h3><div>Rag</div>
+          <button class="play-btn">Play</button>
+        </div>
+
+        <div class="player-card" data-src="songs/ventura.mp3">
+          <img src="images/ventura.png" alt="Evening Glow cover">
+          <h3>Ventura Highs</h3><div>Raghav</div>
+          <button class="play-btn">Play</button>
+        </div>
+      </div>
+      <button class="scroll-btn scroll-right" aria-label="Scroll row2 right" onclick="scrollNext('row2')">&#10095;</button>
+    </div>
+  </div>
+
+  <!-- Bottom player -->
+  <div class="player-bar">
+    <div class="now-playing" id="now-playing-title">No song playing</div>
+    <div id="coffee-wrapper">
+      <div id="container">
+      <div class="steam" id="steam1"> </div>
+      <div class="steam" id="steam2"> </div>
+      <div class="steam" id="steam3"> </div>
+      <div class="steam" id="steam4"> </div>
+      <div id="cup">
+        <div id="cup-body">
+          <div id="cup-shade"></div>
+        </div>
+        <div id="cup-handle"></div>
+      </div>
+      <div id="saucer"></div>
+      <div id="shadow"></div>
+    </div>
+    </div>
+    <audio id="audio-player" controls></audio>
+  </div>
+
+<script>
+  // Independent scroll for each row (renamed functions)
+  function scrollPrev(rowId) {
+    const container = document.getElementById(rowId);
+    if (!container) return;
+    const card = container.querySelector('.player-card');
+    const gap = 30;
+    const step = (card ? card.getBoundingClientRect().width : 250) + gap;
+    container.scrollBy({ left: -step, behavior: 'smooth' });
+  }
+
+  function scrollNext(rowId) {
+    const container = document.getElementById(rowId);
+    if (!container) return;
+    const card = container.querySelector('.player-card');
+    const gap = 30;
+    const step = (card ? card.getBoundingClientRect().width : 250) + gap;
+    container.scrollBy({ left: step, behavior: 'smooth' });
+  }
+
+  // Music player logic (shared across rows)
+  const audioPlayer = document.getElementById('audio-player');
+  const nowPlayingTitle = document.getElementById('now-playing-title');
+  const playButtons = document.querySelectorAll('.play-btn');
+
+  playButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.player-card');
+      if (!card) return;
+      const songSrc = card.getAttribute('data-src');
+      const title = card.querySelector('h3').textContent;
+
+      if (audioPlayer.src && audioPlayer.src.includes(songSrc)) {
+        if (audioPlayer.paused) {
+          audioPlayer.play();
+          btn.textContent = 'Pause';
+        } else {
+          audioPlayer.pause();
+          btn.textContent = 'Play';
+        }
+        return;
+      }
+
+      playButtons.forEach(b => b.textContent = 'Play');
+      audioPlayer.src = songSrc;
+      audioPlayer.play().catch(() => {});
+      nowPlayingTitle.textContent = `Now playing: ${title}`;
+      btn.textContent = 'Pause';
+    });
+  });
+
+  // Keep button states synced with native controls
+  audioPlayer.addEventListener('play', () => {
+    playButtons.forEach(btn => {
+      const c = btn.closest('.player-card');
+      if (audioPlayer.src && c && c.getAttribute('data-src') && audioPlayer.src.includes(c.getAttribute('data-src'))) {
+        btn.textContent = 'Pause';
+      } else {
+        btn.textContent = 'Play';
+      }
+    });
+  });
+
+  audioPlayer.addEventListener('pause', () => {
+    playButtons.forEach(btn => {
+      const c = btn.closest('.player-card');
+      if (audioPlayer.src && c && c.getAttribute('data-src') && audioPlayer.src.includes(c.getAttribute('data-src'))) {
+        btn.textContent = 'Play';
+      }
+    });
+  });
+
+  audioPlayer.addEventListener('ended', () => {
+    nowPlayingTitle.textContent = 'No song playing';
+    playButtons.forEach(b => b.textContent = 'Play');
+  });
+</script>
+</body>
+</html>
